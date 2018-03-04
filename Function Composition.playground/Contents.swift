@@ -4,9 +4,14 @@ import Foundation
 
 let prices = "[\"10\", \"5\", \"null\", \"20\", \"0\"]"
 
-func formatPrices(json: String) -> [String] {
+func parse(json: String) -> [String] {
     let data = json.data(using: .utf8)!
-    let jsonArray = try! JSONSerialization.jsonObject(with: data) as! [String]
+    
+    return try! JSONSerialization.jsonObject(with: data) as! [String]
+}
+
+func formatPrices(json: String) -> [String] {
+    let jsonArray = parse(json: json)
     
     var labels = [String]()
     
@@ -32,5 +37,6 @@ func formatPrices(json: String) -> [String] {
     }
     return labels
 }
+
 
 formatPrices(json: prices)
