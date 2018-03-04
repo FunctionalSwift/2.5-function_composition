@@ -10,33 +10,44 @@ func parse(json: String) -> [String] {
     return try! JSONSerialization.jsonObject(with: data) as! [String]
 }
 
+func getValidPrices(values: [String]) -> [Int] {
+    var prices = [Int]()
+    
+    for value in values {
+        let price = Int(value)
+        
+        if let price = price {
+            prices.append(price)
+        }
+    }
+    
+    return prices
+}
+
 func formatPrices(json: String) -> [String] {
     let jsonArray = parse(json: json)
+    let prices = getValidPrices(values: jsonArray)
     
     var labels = [String]()
     
-    for element in jsonArray {
-        let price = Int(element)
+    for price in prices {
+        var label = ""
         
-        if let price = price {
-            var label = ""
-            
-            if price == 0 {
-                label = "Free"
-            }
-            else {
-                let numberFormatter = NumberFormatter()
-                numberFormatter.numberStyle = .currency
-                numberFormatter.locale = Locale(identifier: "ES_es")
-                
-                label = numberFormatter.string(from: price as NSNumber)!
-            }
-            
-            labels.append(label)
+        if price == 0 {
+            label = "Free"
         }
+        else {
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .currency
+            numberFormatter.locale = Locale(identifier: "ES_es")
+            
+            label = numberFormatter.string(from: price as NSNumber)!
+        }
+        
+        labels.append(label)
     }
+    
     return labels
 }
-
 
 formatPrices(json: prices)
