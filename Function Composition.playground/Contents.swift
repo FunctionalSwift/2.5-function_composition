@@ -24,6 +24,19 @@ func getValidPrices(values: [String]) -> [Int] {
     return prices
 }
 
+func formatPrice(locale: Locale, price: Int) -> String {
+    if price == 0 {
+        return "Free"
+    }
+    else {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .currency
+        numberFormatter.locale = locale
+        
+        return numberFormatter.string(from: price as NSNumber)!
+    }
+}
+
 func formatPrices(json: String) -> [String] {
     let jsonArray = parse(json: json)
     let prices = getValidPrices(values: jsonArray)
@@ -31,20 +44,7 @@ func formatPrices(json: String) -> [String] {
     var labels = [String]()
     
     for price in prices {
-        var label = ""
-        
-        if price == 0 {
-            label = "Free"
-        }
-        else {
-            let numberFormatter = NumberFormatter()
-            numberFormatter.numberStyle = .currency
-            numberFormatter.locale = Locale(identifier: "ES_es")
-            
-            label = numberFormatter.string(from: price as NSNumber)!
-        }
-        
-        labels.append(label)
+        labels.append(formatPrice(locale: Locale(identifier:"ES_es"), price: price))
     }
     
     return labels
