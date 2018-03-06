@@ -11,17 +11,10 @@ func parse(json: String) -> [String] {
 }
 
 func getValidPrices(values: [String]) -> [Int] {
-    var prices = [Int]()
-    
-    for value in values {
-        let price = Int(value)
-        
-        if let price = price {
-            prices.append(price)
-        }
-    }
-    
-    return prices
+    return values
+        .map { Int($0) }
+        .filter { $0 != nil }
+        .map { $0! }
 }
 
 func getFormatter(locale: Locale) -> NumberFormatter {
