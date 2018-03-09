@@ -4,6 +4,12 @@ import Foundation
 
 let prices = "[\"10\", \"5\", \"null\", \"20\", \"0\"]"
 
+func combine<T, U, V>(_ firstStep: @escaping (T) -> U, _ secondStep: @escaping (U) -> V) -> (T) -> V {
+    return { t in
+        secondStep(firstStep(t))
+    }
+}
+
 func parse(json: String) -> [String] {
     let data = json.data(using: .utf8)!
     
@@ -35,11 +41,11 @@ func formatPrice(price: Int) -> String {
 }
 
 func parseAndGetValid(json: String) -> [Int] {
-    return getValidPrices(values: parse(json: json))
+    return combine(parse, getValidPrices)(json)
 }
 
 func formatPrices(json: String) -> [String] {
-    return formatAll(prices: parseAndGetValid(json: json))
+    return combine(parseAndGetValid, formatAll)(json)
 }
 
 func formatAll(prices: [Int]) -> [String] {
