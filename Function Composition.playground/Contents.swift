@@ -42,16 +42,10 @@ func formatPrice(price: Int) -> String {
     }
 }
 
-func parseAndGetValid(json: String) -> [Int] {
-    return (parse |> getValidPrices)(json)
-}
-
-func formatPrices(json: String) -> [String] {
-    return (parseAndGetValid |> formatAll) (json)
-}
-
 func formatAll(prices: [Int]) -> [String] {
     return prices.map(formatPrice)
 }
 
-formatPrices(json: prices)
+let formatPrices = parse |> getValidPrices |> formatAll
+
+formatPrices(prices)
