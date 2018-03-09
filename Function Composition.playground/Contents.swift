@@ -35,16 +35,8 @@ func formatPrice(locale: Locale, price: Int) -> String {
 }
 
 func formatPrices(json: String) -> [String] {
-    let jsonArray = parse(json: json)
-    let prices = getValidPrices(values: jsonArray)
-    
-    var labels = [String]()
-    
-    for price in prices {
-        labels.append(formatPrice(locale: Locale(identifier:"ES_es"), price: price))
-    }
-    
-    return labels
+    return getValidPrices(values: parse(json: json))
+        .map { formatPrice(locale: Locale(identifier:"ES_es"), price: $0) }
 }
 
 formatPrices(json: prices)
