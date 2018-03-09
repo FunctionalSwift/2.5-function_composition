@@ -33,19 +33,26 @@ func getFormatter(locale: Locale) -> NumberFormatter {
     return numberFormatter;
 }
 
-func formatPrice(price: Int) -> String {
-    if price == 0 {
-        return "Free"
-    }
-    else {
-        return getFormatter(locale: Locale(identifier: "ES_es")).string(from: price as NSNumber)!
+func formatPrice(locale: Locale) -> (Int) -> String {
+    return  { price in
+        if price == 0 {
+            return "Free"
+        }
+        else {
+            return getFormatter(locale: locale).string(from: price as NSNumber)!
+        }
     }
 }
 
-func formatAll(prices: [Int]) -> [String] {
-    return prices.map(formatPrice)
+func formatAll(locale: Locale) -> ([Int]) -> [String] {
+    return {
+        $0.map(formatPrice(locale: locale))
+    }
 }
 
-let formatPrices = parse |> getValidPrices |> formatAll
+let formatAllEuro = formatAll(locale: Locale(identifier: "ES_es"))
+
+let formatPrices = parse |> getValidPrices |> formatAllEuro
 
 formatPrices(prices)
+
