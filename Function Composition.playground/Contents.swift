@@ -34,8 +34,12 @@ func formatPrice(price: Int) -> String {
     }
 }
 
+func parseAndGetValid(json: String) -> [Int] {
+    return getValidPrices(values: parse(json: json))
+}
+
 func formatPrices(json: String) -> [String] {
-    return formatAll(prices: getValidPrices(values: parse(json: json)))
+    return formatAll(prices: parseAndGetValid(json: json))
 }
 
 func formatAll(prices: [Int]) -> [String] {
