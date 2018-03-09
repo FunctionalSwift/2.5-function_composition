@@ -4,7 +4,9 @@ import Foundation
 
 let prices = "[\"10\", \"5\", \"null\", \"20\", \"0\"]"
 
-func combine<T, U, V>(_ firstStep: @escaping (T) -> U, _ secondStep: @escaping (U) -> V) -> (T) -> V {
+infix operator |>: AdditionPrecedence
+
+func |><T, U, V>(_ firstStep: @escaping (T) -> U, _ secondStep: @escaping (U) -> V) -> (T) -> V {
     return { t in
         secondStep(firstStep(t))
     }
@@ -41,11 +43,11 @@ func formatPrice(price: Int) -> String {
 }
 
 func parseAndGetValid(json: String) -> [Int] {
-    return combine(parse, getValidPrices)(json)
+    return (parse |> getValidPrices)(json)
 }
 
 func formatPrices(json: String) -> [String] {
-    return combine(parseAndGetValid, formatAll)(json)
+    return (parseAndGetValid |> formatAll) (json)
 }
 
 func formatAll(prices: [Int]) -> [String] {
